@@ -1,0 +1,28 @@
+.main {
+    display: flex;
+    justify-content: center;
+}
+
+.color {
+    color: red;
+}
+.form {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.form h1 {
+    text-align: center;
+}
+.inputBox {
+    margin-top: 10px;
+    border-radius: 10px;
+    height: 30px;
+    width: 400px;
+    padding-left: 5px;
+}
+.buttonCont {
+    display: flex;
+    margin-top: 10px;
+    justify-content: space-evenly;
+}

@@ -1,7 +1,5 @@
-const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
-const { p_key } = require('../config');
 
 const signupService = async (data) => {
     const { name, email, gender, phone, password, dob } = data;
@@ -43,19 +41,13 @@ const loginService = async (data) => {
         return user;
     } catch (err) {
         console.log(err);
-        throw new HttpError(err.message || "Login failed.");
+        throw new Error(err.message || "Login failed.");
     }
 };
 
 const updateService = async (id, data) => {
-    const { password } = data;
-    let hashedPwd;
     try {
-        if (password) {
-            hashedPwd = await bcrypt.hash(password, 12);
-        }
-        data.password = hashedPwd;
-        const user = await User.findByIdAndUpdate(id, data, {new: true});
+        const user = await User.findByIdAndUpdate(id, data, { new: true });
         return user;
     } catch (err) {
         console.log(err);
@@ -67,7 +59,7 @@ const delService = async (id) => {
     try {
         const user = await User.findByIdAndDelete(id);
         if (!user) {
-        throw new Error("No user found");
+            throw new Error("No user found");
         }
         return;
     } catch (err) {
@@ -76,4 +68,33 @@ const delService = async (id) => {
     }
 };
 
-module.exports = { signupService, loginService, updateService, delService };
+const changePass = async (id, data) => {
+    try {
+        const { oldPass, password } = data;
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("No user found.");
+        }
+        const isPwdValid = await bcrypt.compare(oldPass, user.password);
+        if (!isPwdValid) {
+            throw new Error("Old password is not correct.");
+        }
+        const hashedPwd = await bcrypt.hash(password, 12);
+        if (!hashedPwd) {
+            throw new HttpError("Error in password hashing");
+        }
+        const upUser = await User.findByIdAndUpdate(
+            id,
+            { password: hashedPwd },
+            { new: true }
+        );
+        if (!user) {
+            throw new Error("No user found");
+        }
+        return;
+    } catch (err) {
+        throw new HttpError(err.message || "Password updation failed");
+    }
+};
+
+module.exports = { signupService, loginService, updateService, delService, changePass };

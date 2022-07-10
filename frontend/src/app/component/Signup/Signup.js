@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import {signup_URL} from "../../config/index";
+import { signup_URL } from "../../config/index";
 
-// import "./Signup.css";
 
 const Signup = () => {
     const {
@@ -13,17 +12,15 @@ const Signup = () => {
     } = useForm();
     let navigate = useNavigate();
 
-    //   const dispatch = useDispatch();
-
     const onSubmit = (data) => {
         console.log(data);
         axios.post(signup_URL, data)
-        .then((res) => {
-            navigate("/");
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+            .then((res) => {
+                navigate("/");
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     };
 
     const loginHandler = () => {
@@ -32,12 +29,13 @@ const Signup = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <div>
-                <div>
+            <div className="main">
+                <div className="form">
                     <h1>Signup</h1>
                     <input
                         placeholder="Name"
                         type="text"
+                        className="inputBox"
                         {...register("name", { required: true })}
                     />
                     {errors.name?.type === "required" && (
@@ -46,6 +44,7 @@ const Signup = () => {
                     <input
                         placeholder="Email"
                         type="email"
+                        className="inputBox"
                         {...register("email", {
                             required: true,
                             pattern: {
@@ -60,7 +59,7 @@ const Signup = () => {
                     {errors.email?.type === "pattern" && (
                         <p className="color">{errors.email?.message}</p>
                     )}
-                    <select {...register("gender", { required: true })}>
+                    <select {...register("gender", { required: true })} className="inputBox">
                         <option disabled selected>Select gender</option>
                         <option>Male</option>
                         <option>Female</option>
@@ -72,6 +71,7 @@ const Signup = () => {
                     <input
                         placeholder="Phone no."
                         type="number"
+                        className="inputBox"
                         {...register("phone", {
                             required: true,
                             minLength: {
@@ -96,6 +96,7 @@ const Signup = () => {
                     <input
                         placeholder="Password"
                         type="password"
+                        className="inputBox"
                         {...register("password", {
                             required: true,
                             minLength: {
@@ -113,20 +114,23 @@ const Signup = () => {
                     <input
                         placeholder="DOB"
                         type="date"
+                        className="inputBox"
                         {...register("dob", { required: true })}
                     />
                     {errors.date?.type === "required" && (
                         <p className="color">This field is required</p>
                     )}
-                    <button type="submit">
-                        Sign Up
-                    </button>
-                    <button
-                        type="submit"
-                        onClick={loginHandler}
-                    >
-                        Sign In
-                    </button>
+                    <div className="buttonCont">
+                        <button type="submit">
+                            Sign Up
+                        </button>
+                        <button
+                            type="submit"
+                            onClick={loginHandler}
+                        >
+                            Sign In
+                        </button>
+                    </div>
                 </div>
             </div>
         </form>
