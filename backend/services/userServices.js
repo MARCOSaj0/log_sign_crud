@@ -81,7 +81,7 @@ const changePass = async (id, data) => {
         }
         const hashedPwd = await bcrypt.hash(password, 12);
         if (!hashedPwd) {
-            throw new HttpError("Error in password hashing");
+            throw new Error("Error in password hashing");
         }
         const upUser = await User.findByIdAndUpdate(
             id,
@@ -93,7 +93,7 @@ const changePass = async (id, data) => {
         }
         return;
     } catch (err) {
-        throw new HttpError(err.message || "Password updation failed");
+        throw new Error(err.message || "Password updation failed");
     }
 };
 

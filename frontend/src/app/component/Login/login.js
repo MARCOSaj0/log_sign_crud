@@ -7,7 +7,8 @@ import './login.css';
 
 const Login = () => {
     const dispatch = useDispatch();
-    const loginData = useSelector((state) => state.login);
+    const loginData = useSelector((state) => state.user);
+    const user = localStorage.getItem("user");
 
     const {
         register,
@@ -17,19 +18,16 @@ const Login = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        console.log("asnd");
-        console.log(loginData);
-        if (loginData?.isLoggedIn) {
+        if (loginData?.isLoggedIn || user) {
             navigate('/profile');
         }
         else if (!loginData?.loading && loginData?.error) {
             alert(loginData?.error);
         }
-    }, [loginData]);
+    },[loginData]);
 
 
     const onSubmit = (data) => {
-        console.log(data);
         dispatch(login(data));
     };
 
